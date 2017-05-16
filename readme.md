@@ -13,6 +13,7 @@
 
 ## 理论计算方法
 ![flicker](Doc\flicker_equation.png)
+
 从实际的测试可以看出来，随着flicker程度的变化，DC值并没有明显的变化，而AC值会越来越小。
 
 ## 算法
