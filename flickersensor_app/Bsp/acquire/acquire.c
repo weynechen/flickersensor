@@ -22,7 +22,7 @@ void AcquireStart(void)
 }
 
 
-void ADC_DMA_Callback(void)
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
     HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
     DataReady = 1;
@@ -44,7 +44,7 @@ void SelChannel(uint8_t channel)
         HAL_GPIO_WritePin(GPIOB, A_Pin, GPIO_PIN_RESET);
     }
 
-    if (b == 0x01)
+    if (b == 0x02)
     {
         HAL_GPIO_WritePin(GPIOB, B_Pin, GPIO_PIN_SET);
     }
@@ -54,7 +54,7 @@ void SelChannel(uint8_t channel)
     }
 
 
-    if (c == 0x01)
+    if (c == 0x04)
     {
         HAL_GPIO_WritePin(GPIOB, C_Pin, GPIO_PIN_SET);
     }

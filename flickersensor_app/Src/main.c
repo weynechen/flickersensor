@@ -75,12 +75,13 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
+uint16_t flicker_value;
 /* USER CODE END 0 */
 
 int main(void)
 {
     /* USER CODE BEGIN 1 */
-    uint16_t flicker_value;
+
 
     /* USER CODE END 1 */
 
