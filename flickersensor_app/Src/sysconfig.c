@@ -1,5 +1,5 @@
 /**
-* @file         flicker.h
+* @file         sysconfig.c
 * @author       Weyne Chen
 * @version      V01
 * @date         2017.05.17
@@ -8,14 +8,10 @@
 * @attention    COPYRIGHT WEYNE
 **/
 
-#ifndef __FLICKER_H
-#define __FLICKER_H
-#include "stm32f1xx_hal.h"
+#include "sysconfig.h"
 
 
-uint16_t GetFlickerValue(uint16_t *data , uint16_t len);
+uint16_t Buffer0[N*10];
 
 
-
-#endif
 /********************* (C) COPYRIGHT WEYNE CHEN *******END OF FILE ********/

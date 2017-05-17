@@ -500,6 +500,11 @@
               <FileType>1</FileType>
               <FilePath>../Src/stm32f1xx_it.c</FilePath>
             </File>
+            <File>
+              <FileName>sysconfig.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\sysconfig.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
