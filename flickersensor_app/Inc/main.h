@@ -41,16 +41,44 @@
 
 /* Private define ------------------------------------------------------------*/
 
-#define C_Pin GPIO_PIN_12
-#define C_GPIO_Port GPIOB
-#define B_Pin GPIO_PIN_13
-#define B_GPIO_Port GPIOB
-#define A_Pin GPIO_PIN_14
-#define A_GPIO_Port GPIOB
-#define INH_Pin GPIO_PIN_15
-#define INH_GPIO_Port GPIOB
-#define LCD_RST_Pin GPIO_PIN_6
-#define LCD_RST_GPIO_Port GPIOD
+#define S0_Pin GPIO_PIN_10
+#define S0_GPIO_Port GPIOE
+#define S1_Pin GPIO_PIN_11
+#define S1_GPIO_Port GPIOE
+#define S2_Pin GPIO_PIN_12
+#define S2_GPIO_Port GPIOE
+#define OE_Pin GPIO_PIN_13
+#define OE_GPIO_Port GPIOE
+#define CS_Pin GPIO_PIN_12
+#define CS_GPIO_Port GPIOB
+#define RESET_Pin GPIO_PIN_13
+#define RESET_GPIO_Port GPIOB
+#define RS_Pin GPIO_PIN_14
+#define RS_GPIO_Port GPIOB
+#define WR_Pin GPIO_PIN_15
+#define WR_GPIO_Port GPIOB
+#define RD_Pin GPIO_PIN_8
+#define RD_GPIO_Port GPIOD
+#define D0_Pin GPIO_PIN_9
+#define D0_GPIO_Port GPIOD
+#define D1_Pin GPIO_PIN_10
+#define D1_GPIO_Port GPIOD
+#define D2_Pin GPIO_PIN_11
+#define D2_GPIO_Port GPIOD
+#define D3_Pin GPIO_PIN_12
+#define D3_GPIO_Port GPIOD
+#define D4_Pin GPIO_PIN_13
+#define D4_GPIO_Port GPIOD
+#define D5_Pin GPIO_PIN_14
+#define D5_GPIO_Port GPIOD
+#define D6_Pin GPIO_PIN_15
+#define D6_GPIO_Port GPIOD
+#define D7_Pin GPIO_PIN_6
+#define D7_GPIO_Port GPIOC
+#define SPI_LANE_SEL_Pin GPIO_PIN_7
+#define SPI_LANE_SEL_GPIO_Port GPIOC
+#define S_P_Pin GPIO_PIN_9
+#define S_P_GPIO_Port GPIOC
 
 /* USER CODE BEGIN Private defines */
 

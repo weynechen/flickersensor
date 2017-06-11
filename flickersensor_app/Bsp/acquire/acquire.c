@@ -37,30 +37,30 @@ void SelChannel(uint8_t channel)
 
     if (a == 0x01)
     {
-        HAL_GPIO_WritePin(GPIOB, A_Pin, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOE, S0_Pin, GPIO_PIN_SET);
     }
     else
     {
-        HAL_GPIO_WritePin(GPIOB, A_Pin, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(GPIOE, S0_Pin, GPIO_PIN_RESET);
     }
 
     if (b == 0x02)
     {
-        HAL_GPIO_WritePin(GPIOB, B_Pin, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOE, S1_Pin, GPIO_PIN_SET);
     }
     else
     {
-        HAL_GPIO_WritePin(GPIOB, B_Pin, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(GPIOE, S1_Pin, GPIO_PIN_RESET);
     }
 
 
     if (c == 0x04)
     {
-        HAL_GPIO_WritePin(GPIOB, C_Pin, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOE, S2_Pin, GPIO_PIN_SET);
     }
     else
     {
-        HAL_GPIO_WritePin(GPIOB, C_Pin, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(GPIOE, S2_Pin, GPIO_PIN_RESET);
     }
 }
 
