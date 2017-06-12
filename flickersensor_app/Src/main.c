@@ -38,6 +38,7 @@
 #include "acquire.h"
 #include "sysconfig.h"
 #include "flicker.h"
+#include "lcd.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -95,6 +96,8 @@ int main(void)
   MX_TIM1_Init();
 
   /* USER CODE BEGIN 2 */
+    LCDInit();
+    LCDWriteFull(0xf800);
     SelChannel(4);
     AcquireStart();
   /* USER CODE END 2 */
