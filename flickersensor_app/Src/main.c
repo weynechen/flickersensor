@@ -96,8 +96,8 @@ int main(void)
   MX_TIM1_Init();
 
   /* USER CODE BEGIN 2 */
-    LCDInit();
-    LCDWriteFull(0xf800);
+    LCD_Init();
+    LCD_WriteFull(0x0000);
     SelChannel(4);
     AcquireStart();
   /* USER CODE END 2 */
@@ -352,15 +352,15 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin : RD_Pin */
-  GPIO_InitStruct.Pin = RD_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(RD_GPIO_Port, &GPIO_InitStruct);
+  // GPIO_InitStruct.Pin = RD_Pin;
+  // GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  // GPIO_InitStruct.Pull = GPIO_PULLUP;
+  // HAL_GPIO_Init(RD_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : D0_Pin D1_Pin D2_Pin D3_Pin 
                            D4_Pin D5_Pin D6_Pin */
   GPIO_InitStruct.Pin = D0_Pin|D1_Pin|D2_Pin|D3_Pin 
-                          |D4_Pin|D5_Pin|D6_Pin;
+                          |D4_Pin|D5_Pin|D6_Pin|RD_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);

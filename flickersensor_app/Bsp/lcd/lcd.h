@@ -12,10 +12,25 @@
 #define __LCD_H
 #include "main.h"
 #include "stm32f1xx_hal.h"
+#include "sys.h"
 #define LCD_XSIZE 128
 #define LCD_YSIZE 128
 
-void LCDWriteFull(uint16_t color);
-void LCDInit(void);
+#define SPI_SDA PDout(9)   /*< SPI SDO */
+#define SPI_SCK PBout(14)   /*< SPI CLK */
+#define SPI_CS PBout(12)    
+#define SPI_RS PBout(15)    
+typedef enum {
+    SPI_COMMAND,
+    SPI_DATA,
+} SPIDataCommandTypeDef;
+
+#define MCU 1
+#define SPI 0
+
+#define INTERFACE MCU
+
+void LCD_WriteFull(uint16_t color);
+void LCD_Init(void);
 #endif
 /********************* (C) COPYRIGHT WEYNE CHEN *******END OF FILE ********/
