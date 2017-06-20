@@ -37,9 +37,9 @@ while(0)
 	do                                                           \
 	{                                                            \
 		HAL_GPIO_WritePin(WR_GPIO_Port, WR_Pin, GPIO_PIN_RESET); \
-		DELAY(7);                                               \
+		DELAY(1);                                                \
 		HAL_GPIO_WritePin(WR_GPIO_Port, WR_Pin, GPIO_PIN_SET);   \
-		DELAY(7);                                               \
+		DELAY(1);                                                \
 	\
 } while (0)
 
@@ -165,13 +165,22 @@ API
 void LCD_DrawPoint(uint16_t x, uint16_t y, uint16_t color)
 {
 	SetBeginAddress(x, y);
-	WriteData(color);
+	HAL_GPIO_WritePin(CS_GPIO_Port, CS_Pin, GPIO_PIN_RESET);
+	DELAY(72);
+	HAL_GPIO_WritePin(RS_GPIO_Port, RS_Pin, GPIO_PIN_SET);
+	DELAY(72);
+	ParseData(color >> 8);
+	WR_RISING_EDGE;
+	ParseData(color);
+	WR_RISING_EDGE;
+	HAL_GPIO_WritePin(CS_GPIO_Port, CS_Pin, GPIO_PIN_SET);
 }
 
 void LCD_ShowChar(uint16_t x, uint16_t y, uint8_t num, uint8_t size)
 {
 	uint8_t temp;
 	uint8_t pos, t;
+	uint16_t x_begin = x;
 	num = num - ' ';
 
 	for (pos = 0; pos < size; pos++)
@@ -191,16 +200,67 @@ void LCD_ShowChar(uint16_t x, uint16_t y, uint8_t num, uint8_t size)
 			x++;
 		}
 		y++;
+		x = x_begin;
 	}
 }
 
-void LCD_ShowString(uint16_t x, uint16_t y, const uint8_t *p)
+void LCD_ShowString(uint16_t x, uint16_t y, const uint8_t *p,uint8_t font)
 {
 	while (*p != '\0')
 	{
-		LCD_ShowChar(x, y, *p, 16);
+		LCD_ShowChar(x, y, *p, font);
 		x += 8;
 		p++;
+	}
+}
+
+void LCD_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
+{
+	uint16_t t;
+	int xerr = 0, yerr = 0, delta_x, delta_y, distance;
+	int incx, incy, uRow, uCol;
+
+	delta_x = x2 - x1; //计算坐标增量
+	delta_y = y2 - y1;
+	uRow = x1;
+	uCol = y1;
+	if (delta_x > 0)
+		incx = 1; //设置单步方向
+	else if (delta_x == 0)
+		incx = 0; //垂直线
+	else
+	{
+		incx = -1;
+		delta_x = -delta_x;
+	}
+	if (delta_y > 0)
+		incy = 1;
+	else if (delta_y == 0)
+		incy = 0; //水平线
+	else
+	{
+		incy = -1;
+		delta_y = -delta_y;
+	}
+	if (delta_x > delta_y)
+		distance = delta_x; //选取基本增量坐标轴
+	else
+		distance = delta_y;
+	for (t = 0; t <= distance + 1; t++) //画线输出
+	{
+		LCD_DrawPoint(uRow, uCol, FontColor); //画点
+		xerr += delta_x;
+		yerr += delta_y;
+		if (xerr > distance)
+		{
+			xerr -= distance;
+			uRow += incx;
+		}
+		if (yerr > distance)
+		{
+			yerr -= distance;
+			uCol += incy;
+		}
 	}
 }
 
@@ -210,7 +270,10 @@ void LCD_WriteFull(uint16_t color)
 	uint16_t j = 0;
 
 	SetBeginAddress(0, 0);
-
+	HAL_GPIO_WritePin(CS_GPIO_Port, CS_Pin, GPIO_PIN_RESET);
+	DELAY(72);
+	HAL_GPIO_WritePin(RS_GPIO_Port, RS_Pin, GPIO_PIN_SET);
+	DELAY(72);
 	for (i = 0; i < LCD_XSIZE; i++)
 	{
 		for (j = 0; j < LCD_YSIZE; j++)
@@ -218,11 +281,16 @@ void LCD_WriteFull(uint16_t color)
 #if (INTERFACE == SPI)
 			WriteColor(color);
 #else
-			WriteData(color >> 8);
-			WriteData(color);
+
+			ParseData(color >> 8);
+			WR_RISING_EDGE;
+			ParseData(color);
+			WR_RISING_EDGE;
+
 #endif
 		}
 	}
+	HAL_GPIO_WritePin(CS_GPIO_Port, CS_Pin, GPIO_PIN_SET);
 }
 
 void LCD_Init(void)
@@ -244,7 +312,7 @@ void LCD_Init(void)
 	HAL_GPIO_WritePin(RESET_GPIO_Port, RESET_Pin, GPIO_PIN_SET);
 	DELAY(100);
 	WriteCmd(0x11); //Sleep out
-	DELAY(120); //DELAY 120ms
+	DELAY(120);		//DELAY 120ms
 	//------------------------------------ST7735S Frame rate-----------------------------------------//
 	WriteCmd(0xB1); //Frame rate 80Hz
 	WriteData(0x02);

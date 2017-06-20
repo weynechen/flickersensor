@@ -39,6 +39,8 @@
 #include "sysconfig.h"
 #include "flicker.h"
 #include "lcd.h"
+#include "stdio.h"
+#include "string.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -76,7 +78,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+	char buff[20];
 
   /* USER CODE END 1 */
 
@@ -97,7 +99,11 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
     LCD_Init();
-    LCD_WriteFull(0x0000);
+    LCD_WriteFull(0);
+		LCD_ShowString(10,0,"Flicker Sensor",16);
+		LCD_DrawLine(0,16,LCD_XSIZE,16);
+    LCD_ShowString(0,32,"Flicker:",12);
+		LCD_ShowString(66,48,"%",12);
     SelChannel(4);
     AcquireStart();
   /* USER CODE END 2 */
@@ -110,6 +116,13 @@ int main(void)
 				if (DataReady)
         {
             flicker_value = GetFlickerValue(Buffer0, N * 10);
+						memset(buff,0,sizeof(buff));
+						if(flicker_value<100)
+							sprintf(buff,"%.1f ",(float)flicker_value/(float)10);
+						else
+							sprintf(buff,"%.1f",(float)flicker_value/(float)10);
+						
+						LCD_ShowString(30,48,(uint8_t *)buff,12);
             DataReady = 0;
             AcquireStart();
         }

@@ -71,7 +71,7 @@ uint16_t GetFlickerValue(uint16_t *data, uint16_t len)
         return 0;
     }
 
-    flicker_value = (max - min) * 100 / avg;
+    flicker_value = (max - min) * 1000 / avg;
 
     return flicker_value;
 }
