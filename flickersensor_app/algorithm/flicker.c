@@ -30,10 +30,10 @@ static void Sort(uint16_t *data, uint16_t len)
 }
 
 
-uint16_t GetFlickerValue(uint16_t *data, uint16_t len)
+float GetFlickerValue(uint16_t *data, uint16_t len)
 {
     uint32_t max = 0, min = 0, avg = 0;
-    uint16_t flicker_value;
+    float flicker_value;
     uint16_t i = 0;
     uint16_t counter = 0;
 
@@ -71,7 +71,7 @@ uint16_t GetFlickerValue(uint16_t *data, uint16_t len)
         return 0;
     }
 
-    flicker_value = (max - min) * 1000 / avg;
+    flicker_value = ((float)max - (float)min) / (float)avg;
 
     return flicker_value;
 }

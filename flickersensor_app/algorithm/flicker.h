@@ -13,7 +13,7 @@
 #include "stm32f1xx_hal.h"
 
 
-uint16_t GetFlickerValue(uint16_t *data , uint16_t len);
+float GetFlickerValue(uint16_t *data , uint16_t len);
 
 
 

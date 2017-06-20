@@ -204,7 +204,7 @@ void LCD_ShowChar(uint16_t x, uint16_t y, uint8_t num, uint8_t size)
 	}
 }
 
-void LCD_ShowString(uint16_t x, uint16_t y, const uint8_t *p,uint8_t font)
+void LCD_ShowString(uint16_t x, uint16_t y, const uint8_t *p, uint8_t font)
 {
 	while (*p != '\0')
 	{
@@ -288,6 +288,30 @@ void LCD_WriteFull(uint16_t color)
 			WR_RISING_EDGE;
 
 #endif
+		}
+	}
+	HAL_GPIO_WritePin(CS_GPIO_Port, CS_Pin, GPIO_PIN_SET);
+}
+
+void LCD_Fill(uint16_t ybegin, uint16_t yend)
+{
+	uint16_t i;
+	uint16_t j;
+	SetBeginAddress(0, ybegin);
+	HAL_GPIO_WritePin(CS_GPIO_Port, CS_Pin, GPIO_PIN_RESET);
+	DELAY(72);
+	HAL_GPIO_WritePin(RS_GPIO_Port, RS_Pin, GPIO_PIN_SET);
+	DELAY(72);
+	for (i = ybegin; i < yend; i++)
+	{
+		for (j = 0; j < LCD_XSIZE; j++)
+		{
+			//LCD_DrawPoint(j, i, FontColor);
+
+			ParseData(FontColor >> 8);
+			WR_RISING_EDGE;
+			ParseData(FontColor);
+			WR_RISING_EDGE;
 		}
 	}
 	HAL_GPIO_WritePin(CS_GPIO_Port, CS_Pin, GPIO_PIN_SET);

@@ -41,6 +41,7 @@
 #include "lcd.h"
 #include "stdio.h"
 #include "string.h"
+#include "math.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -71,7 +72,7 @@ static void MX_TIM1_Init(void);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-uint16_t flicker_value;
+
 /* USER CODE END 0 */
 
 int main(void)
@@ -79,7 +80,8 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
 	char buff[20];
-
+  float flicker_value;
+	float log_flicker;
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -100,10 +102,22 @@ int main(void)
   /* USER CODE BEGIN 2 */
     LCD_Init();
     LCD_WriteFull(0);
+    FontColor = 0xEEEE;
+    LCD_Fill(0,17);
+    LCD_Fill(LCD_YSIZE-17,LCD_YSIZE);
+    FontColor = 0;
+    BackColor = 0xEEEE;
 		LCD_ShowString(10,0,"Flicker Sensor",16);
-		LCD_DrawLine(0,16,LCD_XSIZE,16);
-    LCD_ShowString(0,32,"Flicker:",12);
-		LCD_ShowString(66,48,"%",12);
+		//LCD_DrawLine(0,16,LCD_XSIZE,16);
+    LCD_ShowString(20,LCD_YSIZE-16,"CoolSaven",16);
+		//LCD_DrawLine(0,LCD_YSIZE-17,LCD_XSIZE,LCD_YSIZE-17);
+    FontColor = 0xffff;
+    BackColor = 0;
+    LCD_ShowString(0,20,"Flicker:",12);
+		LCD_ShowString(80,36,"%",12);
+    LCD_ShowString(80,50,"dB",12);
+    LCD_ShowString(0,70,"VCOM:",12);
+    LCD_ShowString(0,90,"ID:",12);
     SelChannel(4);
     AcquireStart();
   /* USER CODE END 2 */
@@ -118,11 +132,22 @@ int main(void)
             flicker_value = GetFlickerValue(Buffer0, N * 10);
 						memset(buff,0,sizeof(buff));
 						if(flicker_value<100)
-							sprintf(buff,"%.1f ",(float)flicker_value/(float)10);
+							sprintf(buff,"%.1f ",(float)flicker_value*100);
 						else
-							sprintf(buff,"%.1f",(float)flicker_value/(float)10);
+							sprintf(buff,"%.1f",(float)flicker_value*100);
 						
-						LCD_ShowString(30,48,(uint8_t *)buff,12);
+						LCD_ShowString(30,36,(uint8_t *)buff,12);
+
+            log_flicker = 10*log10((float)flicker_value);
+            
+            memset(buff,0,sizeof(buff));
+						// if(flicker_value<100)
+						// 	sprintf(buff,"%.1f ",(float)flicker_value*100;
+						// else
+            sprintf(buff,"%.1f",log_flicker);
+						
+						LCD_ShowString(30,50,(uint8_t *)buff,12);
+
             DataReady = 0;
             AcquireStart();
         }
