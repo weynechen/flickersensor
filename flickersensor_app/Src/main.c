@@ -42,6 +42,7 @@
 #include "stdio.h"
 #include "string.h"
 #include "math.h"
+#include "com.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -147,7 +148,7 @@ int main(void)
             sprintf(buff,"%.1f",log_flicker);
 						
 						LCD_ShowString(30,50,(uint8_t *)buff,12);
-
+						SendFlicker((uint16_t)(flicker_value*1000));
             DataReady = 0;
             AcquireStart();
         }

@@ -332,7 +332,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xE</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc; ../Drivers/STM32F1xx_HAL_Driver/Inc; ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy; ../Drivers/CMSIS/Device/ST/STM32F1xx/Include; ../Drivers/CMSIS/Include; ..\Bsp\acquire; ..\Bsp\lcd; ..\algorithm</IncludePath>
+              <IncludePath>../Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\Bsp\acquire;..\Bsp\lcd;..\algorithm;..\Protocol</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -519,6 +519,16 @@
               <FileName>flicker.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\algorithm\flicker.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>protocol</GroupName>
+          <Files>
+            <File>
+              <FileName>com.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Protocol\com.c</FilePath>
             </File>
           </Files>
         </Group>
