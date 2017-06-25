@@ -18,24 +18,20 @@ __packed typedef struct
     uint16_t DataLength;
     uint16_t Data;
     uint8_t Crc8;
-}PackageTypeDef;
+} PackageTypeDef;
 
-typedef enum
-{
+typedef enum {
     TP = 0,
     FLCIKER_SENSOR,
     U_DISK
-}DeviceIDTypeDef;
+} DeviceIDTypeDef;
 
-typedef enum
-{
-	FLICKER_VALUE,
-	
-}FlickerSensorTypeDef;
+typedef enum {
+    FLICKER_VALUE,
 
+} FlickerSensorTypeDef;
 
 void SendFlicker(uint16_t flicker);
-
 
 #endif
 /********************* (C) COPYRIGHT WEYNE CHEN *******END OF FILE ********/
