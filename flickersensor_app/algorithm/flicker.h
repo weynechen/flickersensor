@@ -15,7 +15,14 @@
 
 float GetFlickerValue(uint16_t *data , uint16_t len);
 
+#define OVERFLOW_LIMIT 4000
+#define DC_LIMIT 200
 
+typedef enum
+{
+    DC_ERROR = -1,
+    OVERFLOW_ERROR = -2,
+}FlickerErrorTypeDef;
 
 #endif
 /********************* (C) COPYRIGHT WEYNE CHEN *******END OF FILE ********/

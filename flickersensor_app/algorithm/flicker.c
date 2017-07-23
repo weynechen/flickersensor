@@ -29,7 +29,6 @@ static void Sort(uint16_t *data, uint16_t len)
     }
 }
 
-
 float GetFlickerValue(uint16_t *data, uint16_t len)
 {
     uint32_t max = 0, min = 0, avg = 0;
@@ -46,7 +45,8 @@ float GetFlickerValue(uint16_t *data, uint16_t len)
     }
 
     avg /= counter;
-
+    if (avg < DC_LIMIT)
+        return DC_ERROR;
 
     counter = 0;
     for (i = 1; i < N; i++)
@@ -66,6 +66,9 @@ float GetFlickerValue(uint16_t *data, uint16_t len)
 
     max /= counter;
 
+    if (max > OVERFLOW_LIMIT)
+        return OVERFLOW_ERROR;
+
     if (min > max)
     {
         return 0;
@@ -75,6 +78,5 @@ float GetFlickerValue(uint16_t *data, uint16_t len)
 
     return flicker_value;
 }
-
 
 /********************* (C) COPYRIGHT WEYNE CHEN *******END OF FILE ********/

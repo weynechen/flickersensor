@@ -73,16 +73,16 @@ static void MX_TIM1_Init(void);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-
+static uint8_t ChannelIndex = 4;
 /* USER CODE END 0 */
 
 int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	char buff[20];
+  char buff[20];
   float flicker_value;
-	float log_flicker;
+  float log_flicker;
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -101,63 +101,95 @@ int main(void)
   MX_TIM1_Init();
 
   /* USER CODE BEGIN 2 */
-    LCD_Init();
-    LCD_WriteFull(0);
-    FontColor = 0xEEEE;
-    LCD_Fill(0,17);
-    LCD_Fill(LCD_YSIZE-17,LCD_YSIZE);
-    FontColor = 0;
-    BackColor = 0xEEEE;
-		LCD_ShowString(10,0,"Flicker Sensor",16);
-		//LCD_DrawLine(0,16,LCD_XSIZE,16);
-    LCD_ShowString(20,LCD_YSIZE-16,"CoolSaven",16);
-		//LCD_DrawLine(0,LCD_YSIZE-17,LCD_XSIZE,LCD_YSIZE-17);
-    FontColor = 0xffff;
-    BackColor = 0;
-    LCD_ShowString(0,20,"Flicker:",12);
-		LCD_ShowString(80,36,"%",12);
-    LCD_ShowString(80,50,"dB",12);
-    LCD_ShowString(0,70,"VCOM:",12);
-    LCD_ShowString(0,90,"ID:",12);
-    SelChannel(4);
-    AcquireStart();
+  LCD_Init();
+  LCD_WriteFull(0);
+  FontColor = 0xEEEE;
+  LCD_Fill(0, 17);
+  LCD_Fill(LCD_YSIZE - 17, LCD_YSIZE);
+  FontColor = 0;
+  BackColor = 0xEEEE;
+  LCD_ShowString(10, 0, "Flicker Sensor", 16);
+  //LCD_DrawLine(0,16,LCD_XSIZE,16);
+  LCD_ShowString(20, LCD_YSIZE - 16, "CoolSaven", 16);
+  //LCD_DrawLine(0,LCD_YSIZE-17,LCD_XSIZE,LCD_YSIZE-17);
+  FontColor = 0xffff;
+  BackColor = 0;
+  LCD_ShowString(0, 20, "Flicker:", 12);
+  LCD_ShowString(80, 36, "%", 12);
+  LCD_ShowString(80, 50, "dB", 12);
+  LCD_ShowString(0, 70, "VCOM:", 12);
+  LCD_ShowString(0, 90, "ID:", 12);
+  SelChannel(ChannelIndex);
+  AcquireStart();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-    while (1)
+  while (1)
+  {
+
+    if (DataReady)
     {
-			
-				if (DataReady)
+      flicker_value = GetFlickerValue(Buffer0, N * 10);
+      if (flicker_value == (float)OVERFLOW_ERROR)
+      {
+        if (ChannelIndex != 0)
         {
-            flicker_value = GetFlickerValue(Buffer0, N * 10);
-						memset(buff,0,sizeof(buff));
-						if(flicker_value<100)
-							sprintf(buff,"%.1f ",(float)flicker_value*100);
-						else
-							sprintf(buff,"%.1f",(float)flicker_value*100);
-						
-						LCD_ShowString(30,36,(uint8_t *)buff,12);
-
-            log_flicker = 10*log10((float)flicker_value);
-            
-            memset(buff,0,sizeof(buff));
-						// if(flicker_value<100)
-						// 	sprintf(buff,"%.1f ",(float)flicker_value*100;
-						// else
-            sprintf(buff,"%.1f",log_flicker);
-						
-						LCD_ShowString(30,50,(uint8_t *)buff,12);
-						SendFlicker((uint16_t)(flicker_value*1000));
-            DataReady = 0;
-            AcquireStart();
+          SelChannel(ChannelIndex--);
         }
-  /* USER CODE END WHILE */
+        else
+        {
+          LCD_ShowString(30, 36, "ERR  ", 12);
+          LCD_ShowString(30, 50, "ERR  ", 12);
+        }
+      }
+      else if (flicker_value == (float)DC_ERROR)
+      {
+        if (ChannelIndex != 7)
+        {
+          SelChannel(ChannelIndex++);
+        }
+        else
+        {
+          LCD_ShowString(30, 36, "ERR  ", 12);
+          LCD_ShowString(30, 50, "ERR  ", 12);
+        }
+      }
+      else
+      {
+        uint8_t len;
+        memset(buff, 0, sizeof(buff));
+        sprintf(buff, "%.1f ", (float)flicker_value * 100);
+        len = strlen(buff);
+        while (len < 5)
+        {
+          buff[len++] = ' ';
+        }
+        LCD_ShowString(30, 36, (uint8_t *)buff, 12);
 
-  /* USER CODE BEGIN 3 */
+        log_flicker = 10 * log10((float)flicker_value);
+
+        memset(buff, 0, sizeof(buff));
+        // if(flicker_value<100)
+        // 	sprintf(buff,"%.1f ",(float)flicker_value*100;
+        // else
+        sprintf(buff, "%.1f", log_flicker);
+        len = strlen(buff);
+        while (len < 5)
+        {
+          buff[len++] = ' ';
+        }
+        LCD_ShowString(30, 50, (uint8_t *)buff, 12);
+        SendFlicker((uint16_t)(flicker_value * 1000));
+      }
+      DataReady = 0;
+      AcquireStart();
     }
-  /* USER CODE END 3 */
+    /* USER CODE END WHILE */
 
+    /* USER CODE BEGIN 3 */
+  }
+  /* USER CODE END 3 */
 }
 
 /** System Clock Configuration
@@ -169,7 +201,7 @@ void SystemClock_Config(void)
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
   RCC_PeriphCLKInitTypeDef PeriphClkInit;
 
-    /**Initializes the CPU, AHB and APB busses clocks 
+  /**Initializes the CPU, AHB and APB busses clocks 
     */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
@@ -183,10 +215,9 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-    /**Initializes the CPU, AHB and APB busses clocks 
+  /**Initializes the CPU, AHB and APB busses clocks 
     */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
@@ -204,11 +235,11 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-    /**Configure the Systick interrupt time 
+  /**Configure the Systick interrupt time 
     */
-  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
+  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000);
 
-    /**Configure the Systick 
+  /**Configure the Systick 
     */
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
@@ -222,7 +253,7 @@ static void MX_ADC1_Init(void)
 
   ADC_ChannelConfTypeDef sConfig;
 
-    /**Common config 
+  /**Common config 
     */
   hadc1.Instance = ADC1;
   hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
@@ -236,7 +267,7 @@ static void MX_ADC1_Init(void)
     Error_Handler();
   }
 
-    /**Configure Regular Channel 
+  /**Configure Regular Channel 
     */
   sConfig.Channel = ADC_CHANNEL_0;
   sConfig.Rank = 1;
@@ -245,7 +276,6 @@ static void MX_ADC1_Init(void)
   {
     Error_Handler();
   }
-
 }
 
 /* TIM1 init function */
@@ -309,7 +339,6 @@ static void MX_TIM1_Init(void)
   {
     Error_Handler();
   }
-
 }
 
 /* USART1 init function */
@@ -328,13 +357,12 @@ static void MX_USART1_UART_Init(void)
   {
     Error_Handler();
   }
-
 }
 
 /** 
   * Enable DMA controller clock
   */
-static void MX_DMA_Init(void) 
+static void MX_DMA_Init(void)
 {
   /* DMA controller clock enable */
   __HAL_RCC_DMA1_CLK_ENABLE();
@@ -343,7 +371,6 @@ static void MX_DMA_Init(void)
   /* DMA1_Channel1_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
-
 }
 
 /** Configure pins as 
@@ -366,26 +393,25 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOE, S0_Pin|S1_Pin|S2_Pin|OE_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOE, S0_Pin | S1_Pin | S2_Pin | OE_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, CS_Pin|RESET_Pin|RS_Pin|WR_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, CS_Pin | RESET_Pin | RS_Pin | WR_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, D0_Pin|D1_Pin|D2_Pin|D3_Pin 
-                          |D4_Pin|D5_Pin|D6_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, D0_Pin | D1_Pin | D2_Pin | D3_Pin | D4_Pin | D5_Pin | D6_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, D7_Pin|SPI_LANE_SEL_Pin|S_P_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, D7_Pin | SPI_LANE_SEL_Pin | S_P_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : S0_Pin S1_Pin S2_Pin OE_Pin */
-  GPIO_InitStruct.Pin = S0_Pin|S1_Pin|S2_Pin|OE_Pin;
+  GPIO_InitStruct.Pin = S0_Pin | S1_Pin | S2_Pin | OE_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
   /*Configure GPIO pins : CS_Pin RESET_Pin RS_Pin WR_Pin */
-  GPIO_InitStruct.Pin = CS_Pin|RESET_Pin|RS_Pin|WR_Pin;
+  GPIO_InitStruct.Pin = CS_Pin | RESET_Pin | RS_Pin | WR_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -398,18 +424,16 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : D0_Pin D1_Pin D2_Pin D3_Pin 
                            D4_Pin D5_Pin D6_Pin */
-  GPIO_InitStruct.Pin = D0_Pin|D1_Pin|D2_Pin|D3_Pin 
-                          |D4_Pin|D5_Pin|D6_Pin|RD_Pin;
+  GPIO_InitStruct.Pin = D0_Pin | D1_Pin | D2_Pin | D3_Pin | D4_Pin | D5_Pin | D6_Pin | RD_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
   /*Configure GPIO pins : D7_Pin SPI_LANE_SEL_Pin S_P_Pin */
-  GPIO_InitStruct.Pin = D7_Pin|SPI_LANE_SEL_Pin|S_P_Pin;
+  GPIO_InitStruct.Pin = D7_Pin | SPI_LANE_SEL_Pin | S_P_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
 }
 
 /* USER CODE BEGIN 4 */
@@ -424,11 +448,11 @@ static void MX_GPIO_Init(void)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler */
-    /* User can add his own implementation to report the HAL error return state */
-    while (1)
-    {
-    }
-  /* USER CODE END Error_Handler */ 
+  /* User can add his own implementation to report the HAL error return state */
+  while (1)
+  {
+  }
+  /* USER CODE END Error_Handler */
 }
 
 #ifdef USE_FULL_ASSERT
@@ -440,24 +464,23 @@ void Error_Handler(void)
    * @param line: assert_param error line source number
    * @retval None
    */
-void assert_failed(uint8_t* file, uint32_t line)
+void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
 
-    /* User can add his own implementation to report the file name and line number,
+  /* User can add his own implementation to report the file name and line number,
      * ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
-
 }
 
 #endif
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-*/ 
+*/
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
