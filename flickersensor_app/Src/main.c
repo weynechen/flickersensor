@@ -73,7 +73,7 @@ static void MX_TIM1_Init(void);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-static uint8_t ChannelIndex = 4;
+static uint8_t ChannelIndex = 7;
 /* USER CODE END 0 */
 
 int main(void)
@@ -135,24 +135,14 @@ int main(void)
       {
         if (ChannelIndex != 0)
         {
-          SelChannel(ChannelIndex--);
-        }
-        else
-        {
-          LCD_ShowString(30, 36, "ERR  ", 12);
-          LCD_ShowString(30, 50, "ERR  ", 12);
+					ChannelIndex--;
         }
       }
       else if (flicker_value == (float)DC_ERROR)
       {
         if (ChannelIndex != 7)
         {
-          SelChannel(ChannelIndex++);
-        }
-        else
-        {
-          LCD_ShowString(30, 36, "ERR  ", 12);
-          LCD_ShowString(30, 50, "ERR  ", 12);
+					ChannelIndex++;
         }
       }
       else
@@ -182,6 +172,7 @@ int main(void)
         LCD_ShowString(30, 50, (uint8_t *)buff, 12);
         SendFlicker((uint16_t)(flicker_value * 1000));
       }
+			SelChannel(ChannelIndex);
       DataReady = 0;
       AcquireStart();
     }
