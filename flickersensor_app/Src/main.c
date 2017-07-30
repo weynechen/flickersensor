@@ -52,6 +52,7 @@ DMA_HandleTypeDef hdma_adc1;
 TIM_HandleTypeDef htim1;
 
 UART_HandleTypeDef huart1;
+DMA_HandleTypeDef hdma_usart1_rx;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
@@ -119,6 +120,12 @@ int main(void)
   LCD_ShowString(80, 50, "dB", 12);
   LCD_ShowString(0, 70, "VCOM:", 12);
   LCD_ShowString(0, 90, "ID:", 12);
+
+	if(HAL_UART_Receive_DMA(&huart1,RXTemp,BUFFER_SIZE) != HAL_OK)
+	{
+		while(1);
+	}
+	
   SelChannel(ChannelIndex);
   AcquireStart();
   /* USER CODE END 2 */
@@ -135,14 +142,14 @@ int main(void)
       {
         if (ChannelIndex != 0)
         {
-					ChannelIndex--;
+          ChannelIndex--;
         }
       }
       else if (flicker_value == (float)DC_ERROR)
       {
         if (ChannelIndex != 7)
         {
-					ChannelIndex++;
+          ChannelIndex++;
         }
       }
       else
@@ -172,9 +179,38 @@ int main(void)
         LCD_ShowString(30, 50, (uint8_t *)buff, 12);
         SendFlicker((uint16_t)(flicker_value * 1000));
       }
-			SelChannel(ChannelIndex);
+      SelChannel(ChannelIndex);
       DataReady = 0;
       AcquireStart();
+    }
+
+    if (TaskID != TASK_NULL)
+    {
+      switch (TaskID)
+      {
+      case VCOM_VALUE:
+        memset(buff, 0, sizeof(buff));
+        if (DataLen == 2)
+        {
+          sprintf(buff, "0x%2X%2X", DataTemp[0],DataTemp[1]);
+          LCD_ShowString(64, 90, (uint8_t *)buff, 12);
+        }
+        break;
+
+      case ID_VALUE:
+        memset(buff, 0, sizeof(buff));
+        if (DataLen == 2)
+        {
+          sprintf(buff, "0x%2X%2X", DataTemp[0],DataTemp[1]);
+          LCD_ShowString(64, 70, (uint8_t *)buff, 12);
+        }
+        break;
+
+      default:
+        break;
+      }
+
+      TaskID = TASK_NULL;
     }
     /* USER CODE END WHILE */
 
@@ -362,6 +398,9 @@ static void MX_DMA_Init(void)
   /* DMA1_Channel1_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+  /* DMA1_Channel5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 2, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
 }
 
 /** Configure pins as 

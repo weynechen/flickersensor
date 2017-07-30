@@ -13,6 +13,14 @@
 #include "stm32f1xx_hal.h"
 
 #define N 5
+#define BUFFER_SIZE 128
+
+typedef enum
+{
+	VCOM_VALUE,
+	ID_VALUE,
+	TASK_NULL = 0xff,
+}TaskIDTypeDef;
 
 extern ADC_HandleTypeDef hadc1;
 extern DMA_HandleTypeDef hdma_adc1;
@@ -20,6 +28,12 @@ extern UART_HandleTypeDef huart1;
 extern TIM_HandleTypeDef htim1;
 extern uint8_t DataReady;
 extern uint16_t Buffer0[N*10];
+extern DMA_HandleTypeDef hdma_usart1_rx;
+extern uint8_t RXTemp[BUFFER_SIZE];
+extern uint8_t DataTemp[BUFFER_SIZE];
+extern TaskIDTypeDef TaskID;
+extern uint16_t DataLen;
+
 
 #endif
 /********************* (C) COPYRIGHT WEYNE CHEN *******END OF FILE ********/

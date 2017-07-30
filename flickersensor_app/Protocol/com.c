@@ -9,7 +9,8 @@
 **/
 
 #include "com.h"
-static uint8_t TXTemp[128];
+#include "string.h"
+
 /**
 * Static table used for the table_driven implementation.
 *****************************************************************************/
@@ -52,13 +53,37 @@ uint8_t CalCrc8(const uint8_t *data, uint16_t data_len)
 void SendFlicker(uint16_t flicker)
 {
     PackageTypeDef package;
-    package.DeviceID = FLCIKER_SENSOR;
+    package.DeviceID = FLICKER_SENSOR;
     package.PackageID = FLICKER_VALUE;
     package.DataLength = sizeof(flicker);
     package.Data = flicker;
     package.Crc8 = CalCrc8((uint8_t *)&package, sizeof(package) - 1);
 
     HAL_UART_Transmit(&huart1, (uint8_t *)&package, sizeof(package), 100);
+}
+
+void UART1_RestartDMA(void)
+{
+    __HAL_DMA_DISABLE(&hdma_usart1_rx);
+    hdma_usart1_rx.Instance->CNDTR = BUFFER_SIZE;
+    __HAL_DMA_ENABLE(&hdma_usart1_rx);
+}
+
+void ParsePack(void)
+{
+    if (RXTemp[0] == FLICKER_SENSOR)
+    {
+        uint16_t data_len = RXTemp[2];
+        uint8_t crc = RXTemp[3 + data_len];
+        if (data_len > BUFFER_SIZE - 3)
+            return;
+        if (CalCrc8(RXTemp, 3 + data_len) == crc)
+        {
+            TaskID = (TaskIDTypeDef)RXTemp[1];
+            DataLen = data_len;
+            memcpy(&RXTemp[3], DataTemp, data_len);
+        }
+    }
 }
 
 /********************* (C) COPYRIGHT WEYNE CHEN *******END OF FILE ********/

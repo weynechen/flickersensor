@@ -72,7 +72,7 @@ __packed typedef struct
 typedef enum
 {
     TP = 0,
-    FLCIKER_SENSOR,
+    FLICKER_SENSOR,
     U_DISK
 }DeviceIDTypeDef;
 ```

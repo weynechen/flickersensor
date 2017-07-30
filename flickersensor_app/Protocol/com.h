@@ -22,7 +22,7 @@ __packed typedef struct
 
 typedef enum {
     TP = 0,
-    FLCIKER_SENSOR,
+    FLICKER_SENSOR,
     U_DISK
 } DeviceIDTypeDef;
 
@@ -32,6 +32,7 @@ typedef enum {
 } FlickerSensorTypeDef;
 
 void SendFlicker(uint16_t flicker);
-
+void ParsePack(void);
+void UART1_RestartDMA(void);
 #endif
 /********************* (C) COPYRIGHT WEYNE CHEN *******END OF FILE ********/
