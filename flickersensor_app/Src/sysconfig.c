@@ -16,5 +16,7 @@ uint8_t RXTemp[BUFFER_SIZE];
 TaskIDTypeDef TaskID = TASK_NULL;
 uint16_t DataLen = 0;
 uint8_t DataTemp[BUFFER_SIZE];
+uint16_t VCOM = 0;
+uint16_t ID = 0;
 
 /********************* (C) COPYRIGHT WEYNE CHEN *******END OF FILE ********/

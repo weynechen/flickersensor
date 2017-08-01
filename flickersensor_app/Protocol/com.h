@@ -26,10 +26,6 @@ typedef enum {
     U_DISK
 } DeviceIDTypeDef;
 
-typedef enum {
-    FLICKER_VALUE,
-
-} FlickerSensorTypeDef;
 
 void SendFlicker(uint16_t flicker);
 void ParsePack(void);

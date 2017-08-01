@@ -121,11 +121,12 @@ int main(void)
   LCD_ShowString(0, 70, "VCOM:", 12);
   LCD_ShowString(0, 90, "ID:", 12);
 
-	if(HAL_UART_Receive_DMA(&huart1,RXTemp,BUFFER_SIZE) != HAL_OK)
-	{
-		while(1);
-	}
-	
+  if (HAL_UART_Receive_DMA(&huart1, RXTemp, BUFFER_SIZE) != HAL_OK)
+  {
+    while (1)
+      ;
+  }
+
   SelChannel(ChannelIndex);
   AcquireStart();
   /* USER CODE END 2 */
@@ -134,7 +135,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
     if (DataReady)
     {
       flicker_value = GetFlickerValue(Buffer0, N * 10);
@@ -186,30 +186,11 @@ int main(void)
 
     if (TaskID != TASK_NULL)
     {
-      switch (TaskID)
-      {
-      case VCOM_VALUE:
-        memset(buff, 0, sizeof(buff));
-        if (DataLen == 2)
-        {
-          sprintf(buff, "0x%2X%2X", DataTemp[0],DataTemp[1]);
-          LCD_ShowString(64, 90, (uint8_t *)buff, 12);
-        }
-        break;
-
-      case ID_VALUE:
-        memset(buff, 0, sizeof(buff));
-        if (DataLen == 2)
-        {
-          sprintf(buff, "0x%2X%2X", DataTemp[0],DataTemp[1]);
-          LCD_ShowString(64, 70, (uint8_t *)buff, 12);
-        }
-        break;
-
-      default:
-        break;
-      }
-
+      memset(buff, 0, sizeof(buff));
+      sprintf(buff, "0x%X", VCOM);
+      LCD_ShowString(54, 70, (uint8_t *)buff, 12);
+      sprintf(buff, "0x%X", ID);
+      LCD_ShowString(54, 90, (uint8_t *)buff, 12);
       TaskID = TASK_NULL;
     }
     /* USER CODE END WHILE */

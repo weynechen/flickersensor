@@ -73,15 +73,28 @@ void ParsePack(void)
 {
     if (RXTemp[0] == FLICKER_SENSOR)
     {
-        uint16_t data_len = RXTemp[2];
-        uint8_t crc = RXTemp[3 + data_len];
-        if (data_len > BUFFER_SIZE - 3)
+        uint16_t data_len = *(uint16_t *)&RXTemp[2];
+        uint8_t crc = RXTemp[4 + data_len];
+        if (data_len > BUFFER_SIZE - 4)
             return;
-        if (CalCrc8(RXTemp, 3 + data_len) == crc)
+        if (CalCrc8(RXTemp, 4 + data_len) == crc)
         {
             TaskID = (TaskIDTypeDef)RXTemp[1];
-            DataLen = data_len;
-            memcpy(&RXTemp[3], DataTemp, data_len);
+            switch (TaskID)
+            {
+            case VCOM_VALUE:
+                VCOM = *(uint16_t *)&RXTemp[4];
+                break;
+
+            case ID_VALUE:
+                ID = *(uint16_t *)&RXTemp[4];
+                break;
+
+            default:
+                DataLen = data_len;
+                memcpy(&RXTemp[4], DataTemp, data_len);
+                break;
+            }
         }
     }
 }

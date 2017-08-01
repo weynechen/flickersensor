@@ -17,8 +17,9 @@
 
 typedef enum
 {
-	VCOM_VALUE,
-	ID_VALUE,
+    FLICKER_VALUE,
+    VCOM_VALUE,
+    ID_VALUE,
 	TASK_NULL = 0xff,
 }TaskIDTypeDef;
 
@@ -33,6 +34,8 @@ extern uint8_t RXTemp[BUFFER_SIZE];
 extern uint8_t DataTemp[BUFFER_SIZE];
 extern TaskIDTypeDef TaskID;
 extern uint16_t DataLen;
+extern uint16_t VCOM;
+extern uint16_t ID;
 
 
 #endif
