@@ -75,6 +75,7 @@ static void MX_TIM1_Init(void);
 
 /* USER CODE BEGIN 0 */
 static uint8_t ChannelIndex = 7;
+static uint8_t TimeToSend = 0;
 /* USER CODE END 0 */
 
 int main(void)
@@ -155,6 +156,9 @@ int main(void)
       else
       {
         uint8_t len;
+
+        //calibrate
+        flicker_value *= 1.6;
         memset(buff, 0, sizeof(buff));
         sprintf(buff, "%.1f ", (float)flicker_value * 100);
         len = strlen(buff);
@@ -167,9 +171,6 @@ int main(void)
         log_flicker = 10 * log10((float)flicker_value);
 
         memset(buff, 0, sizeof(buff));
-        // if(flicker_value<100)
-        // 	sprintf(buff,"%.1f ",(float)flicker_value*100;
-        // else
         sprintf(buff, "%.1f", log_flicker);
         len = strlen(buff);
         while (len < 5)
@@ -177,7 +178,11 @@ int main(void)
           buff[len++] = ' ';
         }
         LCD_ShowString(30, 50, (uint8_t *)buff, 12);
-        SendFlicker((uint16_t)(flicker_value * 1000));
+        if (TimeToSend)
+        {
+          TimeToSend = 0;
+          SendFlicker((uint16_t)(flicker_value * 1000));
+        }
       }
       SelChannel(ChannelIndex);
       DataReady = 0;
@@ -186,11 +191,18 @@ int main(void)
 
     if (TaskID != TASK_NULL)
     {
-      memset(buff, 0, sizeof(buff));
-      sprintf(buff, "0x%X", VCOM);
-      LCD_ShowString(54, 70, (uint8_t *)buff, 12);
-      sprintf(buff, "0x%X", ID);
-      LCD_ShowString(54, 90, (uint8_t *)buff, 12);
+      if (TaskID == FLICKER_VALUE)
+      {
+        TimeToSend = 1;
+      }
+      else
+      {
+        memset(buff, 0, sizeof(buff));
+        sprintf(buff, "0x%X", VCOM);
+        LCD_ShowString(54, 70, (uint8_t *)buff, 12);
+        sprintf(buff, "0x%X", ID);
+        LCD_ShowString(54, 90, (uint8_t *)buff, 12);
+      }
       TaskID = TASK_NULL;
     }
     /* USER CODE END WHILE */
