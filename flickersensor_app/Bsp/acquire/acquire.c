@@ -14,20 +14,17 @@
 
 uint8_t DataReady = 0;
 
-
 void AcquireStart(void)
 {
-    HAL_ADC_Start_DMA(&hadc1, (uint32_t *)Buffer0, N * 10);
+    HAL_ADC_Start_DMA(&hadc1, (uint32_t *)Buffer0, SAMPLE_SIZE);
     HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 }
 
-
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
     HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
     DataReady = 1;
 }
-
 
 void SelChannel(uint8_t channel)
 {
@@ -53,7 +50,6 @@ void SelChannel(uint8_t channel)
         HAL_GPIO_WritePin(GPIOE, S1_Pin, GPIO_PIN_RESET);
     }
 
-
     if (c == 0x04)
     {
         HAL_GPIO_WritePin(GPIOE, S2_Pin, GPIO_PIN_SET);
@@ -63,6 +59,5 @@ void SelChannel(uint8_t channel)
         HAL_GPIO_WritePin(GPIOE, S2_Pin, GPIO_PIN_RESET);
     }
 }
-
 
 /********************* (C) COPYRIGHT WEYNE CHEN *******END OF FILE ********/

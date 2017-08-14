@@ -12,7 +12,9 @@
 #define __SYSCONFIG_H
 #include "stm32f1xx_hal.h"
 
-#define N 5
+#define N 5 //sample period
+#define PERIOD 50 //wave period
+#define SAMPLE_SIZE (N*PERIOD)
 #define BUFFER_SIZE 128
 
 typedef enum
@@ -28,7 +30,7 @@ extern DMA_HandleTypeDef hdma_adc1;
 extern UART_HandleTypeDef huart1;
 extern TIM_HandleTypeDef htim1;
 extern uint8_t DataReady;
-extern uint16_t Buffer0[N*10];
+extern uint16_t Buffer0[SAMPLE_SIZE];
 extern DMA_HandleTypeDef hdma_usart1_rx;
 extern uint8_t RXTemp[BUFFER_SIZE];
 extern uint8_t DataTemp[BUFFER_SIZE];
