@@ -89,6 +89,10 @@ void ParsePack(void)
             case ID_VALUE:
                 ID = *(uint16_t *)&RXTemp[4];
                 break;
+            
+            case OTP_TIMES:
+                Times = *(uint16_t *)&RXTemp[4];
+                break;
 
             default:
                 DataLen = data_len;

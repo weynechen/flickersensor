@@ -70,11 +70,11 @@ static void MX_TIM1_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
-#define  LIGHT_STEEL_BLUE  46651
-#define  DEEP_SKY_BLUE  1535
-#define  MINERAL_BLUE  627
-#define  SKY_BLUE  34429
-#define  DARK_CYAN  1105
+#define  LIGHT_STEEL_BLUE    46651
+#define  DEEP_SKY_BLUE       1535
+#define  MINERAL_BLUE        627
+#define  SKY_BLUE            34429
+#define  DARK_CYAN           1105
 
 
 /* USER CODE END PFP */
@@ -89,7 +89,8 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
   char buff[20];
-  float flicker_value;
+  float flicker_value = 0;
+  float last_value    = 1;
   float log_flicker;
 
   /* USER CODE END 1 */
@@ -120,18 +121,18 @@ int main(void)
   LCD_ShowString2(90, 36, "dB");
 
   FontColor = DEEP_SKY_BLUE;
-  LCD_Fill(0,4);  
-  LCD_Fill(70,75);
-  LCD_Fill(LCD_YSIZE - 5,LCD_YSIZE);
+  LCD_Fill(0, 4);
+  LCD_Fill(70, 75);
+  LCD_Fill(LCD_YSIZE - 5, LCD_YSIZE);
 
   FontColor = DARK_CYAN;
-  LCD_Fill(76,LCD_YSIZE - 4);
-  
+  LCD_Fill(76, LCD_YSIZE - 4);
+
   FontColor = SKY_BLUE;
-  LCD_DrawLine(0,4,LCD_XSIZE,4);
-  LCD_DrawLine(0,70,LCD_XSIZE,70);
-  LCD_DrawLine(0,75,LCD_XSIZE,75);
-  LCD_DrawLine(0,LCD_XSIZE - 5,LCD_XSIZE,LCD_XSIZE - 5);
+  LCD_DrawLine(0, 4, LCD_XSIZE, 4);
+  LCD_DrawLine(0, 70, LCD_XSIZE, 70);
+  LCD_DrawLine(0, 75, LCD_XSIZE, 75);
+  LCD_DrawLine(0, LCD_XSIZE - 5, LCD_XSIZE, LCD_XSIZE - 5);
 
   FontColor = 0xffff;
   LCD_ShowString(4, 79, "VCOM:", 12);
@@ -141,6 +142,7 @@ int main(void)
   FontColor = 0xffe0;
   if (CheckSecurity() == false)
   {
+    FontColor = BackColor;
     while (1)
     {
     }
@@ -170,6 +172,7 @@ int main(void)
         {
           ChannelIndex--;
         }
+        last_value = flicker_value;
       }
       else if (flicker_value == (float)DC_ERROR)
       {
@@ -177,32 +180,11 @@ int main(void)
         {
           ChannelIndex++;
         }
+        last_value = flicker_value;
       }
       else
       {
-        uint8_t len;
-
-        //calibrate
-        flicker_value *= 1.6;
-        memset(buff, 0, sizeof(buff));
-        sprintf(buff, "%.1f ", (float)flicker_value * 100);
-        len = strlen(buff);
-        while (len < 5)
-        {
-          buff[len++] = ' ';
-        }
-        LCD_ShowString2(4, 5, (uint8_t *)buff);
-
-        log_flicker = 10 * log10((float)flicker_value);
-
-        memset(buff, 0, sizeof(buff));
-        sprintf(buff, "%.1f", log_flicker);
-        len = strlen(buff);
-        while (len < 5)
-        {
-          buff[len++] = ' ';
-        }
-        LCD_ShowString2(4, 36, (uint8_t *)buff);
+        flicker_value *= 1.3;//calibrate
         if (TimeToSend)
         {
           TimeToSend = 0;
@@ -212,6 +194,32 @@ int main(void)
       SelChannel(ChannelIndex);
       DataReady = 0;
       AcquireStart();
+    }
+    else if (flicker_value != last_value)
+    {
+      uint8_t len;
+
+      last_value = flicker_value;
+
+      memset(buff, 0, sizeof(buff));
+      sprintf(buff, "%.1f ", (float)flicker_value * 100);
+      len = strlen(buff);
+      while (len < 5)
+      {
+        buff[len++] = ' ';
+      }
+      LCD_ShowString2(4, 5, (uint8_t *)buff);
+
+      log_flicker = 10 * log10((float)flicker_value);
+
+      memset(buff, 0, sizeof(buff));
+      sprintf(buff, "%.1f", log_flicker);
+      len = strlen(buff);
+      while (len < 5)
+      {
+        buff[len++] = ' ';
+      }
+      LCD_ShowString2(4, 36, (uint8_t *)buff);
     }
 
     if (TaskID != TASK_NULL)
