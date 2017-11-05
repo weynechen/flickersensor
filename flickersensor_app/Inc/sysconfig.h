@@ -11,6 +11,7 @@
 #ifndef __SYSCONFIG_H
 #define __SYSCONFIG_H
 #include "stm32f1xx_hal.h"
+#include "stdbool.h"
 
 #define N 5 //sample period
 #define PERIOD 50 //wave period
@@ -39,6 +40,6 @@ extern uint16_t DataLen;
 extern uint16_t VCOM;
 extern uint16_t ID;
 
-
+bool CheckSecurity(void);
 #endif
 /********************* (C) COPYRIGHT WEYNE CHEN *******END OF FILE ********/

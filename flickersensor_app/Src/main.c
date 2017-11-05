@@ -76,6 +76,7 @@ static void MX_TIM1_Init(void);
 /* USER CODE BEGIN 0 */
 static uint8_t ChannelIndex = 7;
 static uint8_t TimeToSend = 0;
+
 /* USER CODE END 0 */
 
 int main(void)
@@ -106,8 +107,8 @@ int main(void)
   LCD_Init();
   LCD_WriteFull(0);
   FontColor = 0xEEEE;
-  LCD_Fill(0, 17);
-  LCD_Fill(LCD_YSIZE - 17, LCD_YSIZE);
+//  LCD_Fill(0, 17);
+//  LCD_Fill(LCD_YSIZE - 17, LCD_YSIZE);
   FontColor = 0;
   BackColor = 0xEEEE;
   LCD_ShowString(10, 0, "Flicker Sensor", 16);
@@ -122,6 +123,11 @@ int main(void)
   LCD_ShowString(0, 70, "VCOM:", 12);
   LCD_ShowString(0, 90, "ID:", 12);
 
+  if(CheckSecurity()==false)
+  {
+    while(1);
+  }
+  
   if (HAL_UART_Receive_DMA(&huart1, RXTemp, BUFFER_SIZE) != HAL_OK)
   {
     while (1)
