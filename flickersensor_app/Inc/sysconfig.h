@@ -39,6 +39,7 @@ extern TaskIDTypeDef TaskID;
 extern uint16_t DataLen;
 extern uint16_t VCOM;
 extern uint16_t ID;
+extern uint16_t Times;
 
 bool CheckSecurity(void);
 #endif

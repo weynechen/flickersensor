@@ -23,6 +23,7 @@ uint16_t DataLen = 0;
 uint8_t DataTemp[BUFFER_SIZE];
 uint16_t VCOM = 0;
 uint16_t ID = 0;
+uint16_t Times =0;
 
 static uint32_t CalSecurityCode(void)
 {

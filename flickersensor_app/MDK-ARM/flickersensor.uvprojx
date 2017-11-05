@@ -333,7 +333,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xE</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc; ../Drivers/STM32F1xx_HAL_Driver/Inc; ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy; ../Drivers/CMSIS/Device/ST/STM32F1xx/Include; ../Drivers/CMSIS/Include; ..\Bsp\acquire; ..\Bsp\lcd; ..\algorithm; ..\Protocol</IncludePath>
+              <IncludePath>../Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\algorithm;..\Protocol;..\Bsp</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -502,14 +502,19 @@
           <GroupName>Bsp</GroupName>
           <Files>
             <File>
-              <FileName>lcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Bsp\lcd\lcd.c</FilePath>
-            </File>
-            <File>
               <FileName>acquire.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Bsp\acquire\acquire.c</FilePath>
+              <FilePath>..\Bsp\acquire.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash_if.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Bsp\flash_if.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Bsp\lcd.c</FilePath>
             </File>
           </Files>
         </Group>

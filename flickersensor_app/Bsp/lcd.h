@@ -30,12 +30,14 @@ typedef enum {
 
 #define INTERFACE MCU
 
+void LCD_LoadBg(void);
 void LCD_WriteFull(uint16_t color);
 void LCD_ShowString(uint16_t x, uint16_t y, const uint8_t *p,uint8_t font);
+void LCD_ShowString2(uint16_t x, uint16_t y, const uint8_t *p);
 void LCD_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 void LCD_Init(void);
 void LCD_Fill(uint16_t ybegin, uint16_t yend);
-
+void LCD_ShowChar2(uint16_t x, uint16_t y, uint8_t num);
 extern uint16_t FontColor;
 extern uint16_t BackColor;
 #endif
