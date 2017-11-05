@@ -70,6 +70,12 @@ static void MX_TIM1_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
+#define  LIGHT_STEEL_BLUE  46651
+#define  DEEP_SKY_BLUE  1535
+#define  MINERAL_BLUE  627
+#define  SKY_BLUE  34429
+#define  DARK_CYAN  1105
+
 
 /* USER CODE END PFP */
 
@@ -105,26 +111,33 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
   LCD_Init();
-  LCD_WriteFull(0X5D7A);
+  BackColor = DARK_CYAN;
+  LCD_WriteFull(DARK_CYAN);//0x5D7A
+
   FontColor = 0xffff;
-  BackColor = 0X5D7A;
-  // LCD_DrawLine(2,2,2,68);
-  // LCD_DrawLine(LCD_XSIZE-20,2,LCD_XSIZE-20,68);
-  // LCD_DrawLine(2,2,LCD_XSIZE-20,2);
-  // LCD_DrawLine(2,35,LCD_XSIZE-20,35);
-  // LCD_DrawLine(2,68,LCD_XSIZE-20,68);
-  //LCD_DrawLine(0,70,LCD_XSIZE,70);
-  // LCD_ShowString(LCD_XSIZE-14, 10, "%", 16);
-  // LCD_ShowString(LCD_XSIZE-18, 45, "dB", 16);
 
-  //LCD_ShowString2(4,4,"123.4");
-
-  // LCD_ShowString(0, 20, "Flicker:", 12);
-  LCD_ShowChar2(100, 4, '%');
+  LCD_ShowChar2(100, 5, '%');
   LCD_ShowString2(90, 36, "dB");
-  LCD_ShowString(0, 74, "VCOM:", 12);
-  LCD_ShowString(0, 90, "ID:", 12);
-  LCD_ShowString(0, 106, "Times:", 12);
+
+  FontColor = DEEP_SKY_BLUE;
+  LCD_Fill(0,4);  
+  LCD_Fill(70,75);
+  LCD_Fill(LCD_YSIZE - 5,LCD_YSIZE);
+
+  FontColor = DARK_CYAN;
+  LCD_Fill(76,LCD_YSIZE - 4);
+  
+  FontColor = SKY_BLUE;
+  LCD_DrawLine(0,4,LCD_XSIZE,4);
+  LCD_DrawLine(0,70,LCD_XSIZE,70);
+  LCD_DrawLine(0,75,LCD_XSIZE,75);
+  LCD_DrawLine(0,LCD_XSIZE - 5,LCD_XSIZE,LCD_XSIZE - 5);
+
+  FontColor = 0xffff;
+  LCD_ShowString(4, 79, "VCOM:", 12);
+  LCD_ShowString(4, 94, "ID:", 12);
+  LCD_ShowString(4, 108, "Times:", 12);
+
   FontColor = 0xffe0;
   if (CheckSecurity() == false)
   {
@@ -178,7 +191,7 @@ int main(void)
         {
           buff[len++] = ' ';
         }
-        LCD_ShowString2(4, 4, (uint8_t *)buff);
+        LCD_ShowString2(4, 5, (uint8_t *)buff);
 
         log_flicker = 10 * log10((float)flicker_value);
 
@@ -211,11 +224,11 @@ int main(void)
       {
         memset(buff, 0, sizeof(buff));
         sprintf(buff, "0x%X", VCOM);
-        LCD_ShowString(127, 74, (uint8_t *)buff, 12);
+        LCD_ShowString(64, 74, (uint8_t *)buff, 12);
         sprintf(buff, "0x%X", ID);
-        LCD_ShowString(127, 90, (uint8_t *)buff, 12);
+        LCD_ShowString(64, 90, (uint8_t *)buff, 12);
         sprintf(buff, "0x%X", Times);
-        LCD_ShowString(127, 106, (uint8_t *)buff, 12);
+        LCD_ShowString(64, 106, (uint8_t *)buff, 12);
       }
       TaskID = TASK_NULL;
     }

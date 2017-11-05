@@ -340,6 +340,7 @@ void LCD_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
   }
   for (t = 0; t <= distance + 1; t++)     //画线输出
   {
+    SetBeginAddress(uRow, uCol);
     LCD_DrawPoint(uRow, uCol, FontColor); //画点
     xerr += delta_x;
     yerr += delta_y;

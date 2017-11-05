@@ -23,6 +23,7 @@ typedef enum
     FLICKER_VALUE,
     VCOM_VALUE,
     ID_VALUE,
+	OTP_TIMES,
 	TASK_NULL = 0xff,
 }TaskIDTypeDef;
 
