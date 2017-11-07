@@ -210,7 +210,7 @@ int main(void)
       }
       LCD_ShowString2(4, 5, (uint8_t *)buff);
 
-      log_flicker = 10 * log10((float)flicker_value);
+      log_flicker = 20 * log10((float)flicker_value);
 
       memset(buff, 0, sizeof(buff));
       sprintf(buff, "%.1f", log_flicker);
