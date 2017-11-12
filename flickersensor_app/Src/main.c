@@ -232,11 +232,11 @@ int main(void)
       {
         memset(buff, 0, sizeof(buff));
         sprintf(buff, "0x%X", VCOM);
-        LCD_ShowString(64, 74, (uint8_t *)buff, 12);
+        LCD_ShowString(64, 79, (uint8_t *)buff, 12);
         sprintf(buff, "0x%X", ID);
-        LCD_ShowString(64, 90, (uint8_t *)buff, 12);
+        LCD_ShowString(64, 94, (uint8_t *)buff, 12);
         sprintf(buff, "0x%X", Times);
-        LCD_ShowString(64, 106, (uint8_t *)buff, 12);
+        LCD_ShowString(64, 108, (uint8_t *)buff, 12);
       }
       TaskID = TASK_NULL;
     }
