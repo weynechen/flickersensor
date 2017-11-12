@@ -235,7 +235,7 @@ int main(void)
         LCD_ShowString(64, 79, (uint8_t *)buff, 12);
         sprintf(buff, "0x%X", ID);
         LCD_ShowString(64, 94, (uint8_t *)buff, 12);
-        sprintf(buff, "0x%X", Times);
+        sprintf(buff, "%d", Times);
         LCD_ShowString(64, 108, (uint8_t *)buff, 12);
       }
       TaskID = TASK_NULL;
