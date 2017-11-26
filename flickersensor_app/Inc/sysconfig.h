@@ -14,7 +14,7 @@
 #include "stdbool.h"
 
 #define N 5 //sample period
-#define PERIOD 50 //wave period
+#define PERIOD 33 //wave period
 #define SAMPLE_SIZE (N*PERIOD)
 #define BUFFER_SIZE 128
 

@@ -185,17 +185,17 @@ int main(void)
       else
       {
         flicker_value *= 1.3;//calibrate
-        if (TimeToSend)
+        if(TimeToSend>1)
         {
-          TimeToSend = 0;
           SendFlicker((uint16_t)(flicker_value * 1000));
+          TimeToSend = 0;
         }
       }
       SelChannel(ChannelIndex);
       DataReady = 0;
       AcquireStart();
     }
-    else if (flicker_value != last_value)
+    else if ((flicker_value != last_value)&&(TimeToSend==0))
     {
       uint8_t len;
 
@@ -226,7 +226,7 @@ int main(void)
     {
       if (TaskID == FLICKER_VALUE)
       {
-        TimeToSend = 1;
+        TimeToSend++;
       }
       else
       {
