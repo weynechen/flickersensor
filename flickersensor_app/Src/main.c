@@ -230,6 +230,10 @@ int main(void)
       }
       else
       {
+        LCD_ShowString(64, 79, "    ", 12);
+        LCD_ShowString(64, 94, "    ", 12);
+        LCD_ShowString(64, 108, "    ", 12);
+        
         memset(buff, 0, sizeof(buff));
         sprintf(buff, "0x%X", VCOM);
         LCD_ShowString(64, 79, (uint8_t *)buff, 12);
