@@ -33,13 +33,21 @@ const static uint16_t DataPin[] = { D0_Pin, D1_Pin, D2_Pin, D3_Pin, D4_Pin, D5_P
                     \
   while (0)
 
+// #define WR_RISING_EDGE                                       \
+//   do                                                         \
+//   {                                                          \
+//     HAL_GPIO_WritePin(WR_GPIO_Port, WR_Pin, GPIO_PIN_RESET); \
+//     DELAY(1);                                                \
+//     HAL_GPIO_WritePin(WR_GPIO_Port, WR_Pin, GPIO_PIN_SET);   \
+//     DELAY(1);                                                \
+//                                                              \
+//   } while (0)
+
 #define WR_RISING_EDGE                                       \
   do                                                         \
   {                                                          \
     HAL_GPIO_WritePin(WR_GPIO_Port, WR_Pin, GPIO_PIN_RESET); \
-    DELAY(1);                                                \
     HAL_GPIO_WritePin(WR_GPIO_Port, WR_Pin, GPIO_PIN_SET);   \
-    DELAY(1);                                                \
                                                              \
   } while (0)
 
@@ -70,11 +78,12 @@ static void ParseData(uint8_t data)
 static void WriteCmd(uint8_t cmd)
 {
   HAL_GPIO_WritePin(CS_GPIO_Port, CS_Pin, GPIO_PIN_RESET);
-  DELAY(72);
   HAL_GPIO_WritePin(RS_GPIO_Port, RS_Pin, GPIO_PIN_RESET);
-  DELAY(72);
+  DELAY(75);
   ParseData(cmd);
   WR_RISING_EDGE;
+  DELAY(10);
+  HAL_GPIO_WritePin(RS_GPIO_Port, RS_Pin, GPIO_PIN_SET);
   HAL_GPIO_WritePin(CS_GPIO_Port, CS_Pin, GPIO_PIN_SET);
 }
 
@@ -82,11 +91,12 @@ static void WriteCmd(uint8_t cmd)
 static void WriteData(uint8_t data)
 {
   HAL_GPIO_WritePin(CS_GPIO_Port, CS_Pin, GPIO_PIN_RESET);
-  DELAY(72);
   HAL_GPIO_WritePin(RS_GPIO_Port, RS_Pin, GPIO_PIN_SET);
-  DELAY(72);
+  DELAY(75);
   ParseData(data);
   WR_RISING_EDGE;
+  DELAY(10);
+  HAL_GPIO_WritePin(RS_GPIO_Port, RS_Pin, GPIO_PIN_RESET);  
   HAL_GPIO_WritePin(CS_GPIO_Port, CS_Pin, GPIO_PIN_SET);
 }
 

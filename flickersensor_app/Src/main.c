@@ -476,7 +476,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pins : CS_Pin RESET_Pin RS_Pin WR_Pin */
   GPIO_InitStruct.Pin   = CS_Pin | RESET_Pin | RS_Pin | WR_Pin;
   GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin : RD_Pin */
@@ -489,13 +489,13 @@ static void MX_GPIO_Init(void)
    *                       D4_Pin D5_Pin D6_Pin */
   GPIO_InitStruct.Pin   = D0_Pin | D1_Pin | D2_Pin | D3_Pin | D4_Pin | D5_Pin | D6_Pin | RD_Pin;
   GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
   /*Configure GPIO pins : D7_Pin SPI_LANE_SEL_Pin S_P_Pin */
   GPIO_InitStruct.Pin   = D7_Pin | SPI_LANE_SEL_Pin | S_P_Pin;
   GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 }
 
